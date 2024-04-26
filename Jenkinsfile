@@ -1,0 +1,26 @@
+@Library('mylibrary')_
+
+node('built-in')
+{
+    stage('ContDownload_Master')
+    {
+        cicd.gitDownload("maven")
+    }
+    stage('ContBuild_Master')
+    {
+        cicd.mavenBuild()
+    }
+    stage('ContDeployment_Master')
+    {
+        cicd.tomcatDeploy("ScriptedPipelinewithSharedLibraries","172.31.26.162","mytestapp")
+    }
+    stage('ContTesting_Master')
+    {
+        cicd.gitDownload("FunctionalTesting")
+        cicd.runSelenium("ScriptedPipelinewithSharedLibraries")
+    }
+    stage('ContDelivery_Master')
+    {
+        cicd.tomcatDeploy("ScriptedPipelinewithSharedLibraries","172.31.31.25","myprodapp")
+    }
+}
